@@ -62,7 +62,8 @@ def register_upblock2d(model):
             hidden_states,
             res_hidden_states_tuple,
             temb=None,
-            upsample_size=None
+            upsample_size=None,
+            scale: float = 1.0
         ):
             logger.debug(f"in upblock2d, hidden states shape: {hidden_states.shape}")
             
@@ -90,11 +91,11 @@ def register_upblock2d(model):
                             create_custom_forward(resnet), hidden_states, temb
                         )
                 else:
-                    hidden_states = resnet(hidden_states, temb)
+                    hidden_states = resnet(hidden_states, temb, scale=scale)
 
             if self.upsamplers is not None:
                 for upsampler in self.upsamplers:
-                    hidden_states = upsampler(hidden_states, upsample_size)
+                    hidden_states = upsampler(hidden_states, upsample_size, scale=scale)
 
             return hidden_states
         
@@ -115,7 +116,8 @@ def register_free_upblock2d(model, b1=1.2, b2=1.4, s1=0.9, s2=0.2):
             hidden_states,
             res_hidden_states_tuple,
             temb=None,
-            upsample_size=None
+            upsample_size=None,
+            scale: float = 1.0
         ):
             logger.debug(f"in free upblock2d, hidden states shape: {hidden_states.shape}")
 
@@ -153,11 +155,11 @@ def register_free_upblock2d(model, b1=1.2, b2=1.4, s1=0.9, s2=0.2):
                             create_custom_forward(resnet), hidden_states, temb
                         )
                 else:
-                    hidden_states = resnet(hidden_states, temb)
+                    hidden_states = resnet(hidden_states, temb, scale=scale)
 
             if self.upsamplers is not None:
                 for upsampler in self.upsamplers:
-                    hidden_states = upsampler(hidden_states, upsample_size)
+                    hidden_states = upsampler(hidden_states, upsample_size, scale=scale)
 
             return hidden_states
         
