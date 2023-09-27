@@ -192,6 +192,8 @@ def register_crossattn_upblock2d(model):
         ):
             logger.debug(f"in crossatten upblock2d, hidden states shape: {hidden_states.shape}")
 
+            lora_scale = cross_attention_kwargs.get("scale", 1.0) if cross_attention_kwargs is not None else 1.0
+
             for resnet, attn in zip(self.resnets, self.attentions):
                 # pop res hidden states
                 res_hidden_states = res_hidden_states_tuple[-1]
@@ -228,7 +230,7 @@ def register_crossattn_upblock2d(model):
                         **ckpt_kwargs,
                     )[0]
                 else:
-                    hidden_states = resnet(hidden_states, temb)
+                    hidden_states = resnet(hidden_states, temb, scale=lora_scale)
                     hidden_states = attn(
                         hidden_states,
                         encoder_hidden_states=encoder_hidden_states,
@@ -240,7 +242,7 @@ def register_crossattn_upblock2d(model):
 
             if self.upsamplers is not None:
                 for upsampler in self.upsamplers:
-                    hidden_states = upsampler(hidden_states, upsample_size)
+                    hidden_states = upsampler(hidden_states, upsample_size, scale=lora_scale)
 
             return hidden_states
         
@@ -268,6 +270,8 @@ def register_free_crossattn_upblock2d(model, b1=1.2, b2=1.4, s1=0.9, s2=0.2):
             encoder_attention_mask: Optional[torch.FloatTensor] = None,
         ):
             logger.debug(f"in free crossatten upblock2d, hidden states shape: {hidden_states.shape}")
+
+            lora_scale = cross_attention_kwargs.get("scale", 1.0) if cross_attention_kwargs is not None else 1.0
 
             for resnet, attn in zip(self.resnets, self.attentions):
                 # pop res hidden states
@@ -316,7 +320,7 @@ def register_free_crossattn_upblock2d(model, b1=1.2, b2=1.4, s1=0.9, s2=0.2):
                         **ckpt_kwargs,
                     )[0]
                 else:
-                    hidden_states = resnet(hidden_states, temb)
+                    hidden_states = resnet(hidden_states, temb, scale=lora_scale)
                     hidden_states = attn(
                         hidden_states,
                         encoder_hidden_states=encoder_hidden_states,
@@ -328,7 +332,7 @@ def register_free_crossattn_upblock2d(model, b1=1.2, b2=1.4, s1=0.9, s2=0.2):
 
             if self.upsamplers is not None:
                 for upsampler in self.upsamplers:
-                    hidden_states = upsampler(hidden_states, upsample_size)
+                    hidden_states = upsampler(hidden_states, upsample_size, scale=lora_scale)
 
             return hidden_states
         
