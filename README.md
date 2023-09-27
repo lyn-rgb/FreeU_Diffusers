@@ -49,5 +49,9 @@ video_frames = pipe(prompt, height=320, width=576, num_frames=30).frames
 export_to_video(video_frames, "astronaut_rides_horse.mp4")
 ```
 
+#### 28/09/223
+Current version was successfully ran on diffusers v0.21.2.
+
+#### 26/09/23
 Note that it is supported and tested on diffusers v0.19.3. 
 If you are using the latest diffusers, it is recommended to use the corresponding branch, but it has not been tested.
