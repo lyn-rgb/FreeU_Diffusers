@@ -1,6 +1,6 @@
 "FreeU: Free Lunch in Diffusion U-Net" for Diffusers
 
-The offical code https://github.com/ChenyangSi/FreeU
+The official code https://github.com/ChenyangSi/FreeU
 
 ## Usage
 
